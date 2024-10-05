@@ -1,0 +1,10 @@
+{
+  "name": "ModuleSkins-Editor",
+  "references": [
+    "ModuleSkins"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
