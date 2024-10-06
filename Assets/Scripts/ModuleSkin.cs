@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-internal abstract class ModuleSkin : MonoBehaviour
+public abstract class ModuleSkin : MonoBehaviour
 {
     /// <summary>
     /// The module this skin applies to.
@@ -19,7 +19,7 @@ internal abstract class ModuleSkin : MonoBehaviour
     /// </summary>
     protected virtual void Initialize() { }
     /// <summary>
-    /// Called before the skinned module receives Awake().
+    /// Called after the skinned module receives Awake(), but before it receives Start().
     /// Always called after <see cref="Initialize"/>.
     /// </summary>
     protected virtual void OnStart() { }
@@ -43,6 +43,28 @@ internal abstract class ModuleSkin : MonoBehaviour
     /// Called when the skinned needy module forcefully deactivates.
     /// </summary>
     protected virtual void OnNeedyDeactivation() { }
+
+    protected GameObject GetPrefab(string name)
+    {
+        GameObject go;
+        if (!ModuleSkinsService.Instance.Prefabs.TryGetValue(name, out go))
+            throw new ArgumentException(
+                string.Format("That prefab ({0}) does not exist on the service instance.", name),
+                "name"
+            );
+        return go;
+    }
+
+    private string _loggingTag;
+    private string LoggingTag { get { return _loggingTag = _loggingTag ?? string.Format("[Module Skins] [{0}] ", SkinName); } }
+    protected void Log(string message)
+    {
+        Debug.Log(LoggingTag + message);
+    }
+    protected void LogFormat(string message, params string[] args)
+    {
+        Debug.LogFormat(LoggingTag + message, args);
+    }
 
     private static readonly HashSet<SkinName> s_initialized = new HashSet<SkinName>();
     public SkinName SkinName { get { return new SkinName(ModuleId, Name); } }

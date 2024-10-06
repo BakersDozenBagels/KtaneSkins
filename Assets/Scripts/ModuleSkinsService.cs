@@ -9,8 +9,11 @@ using UnityEngine;
 [RequireComponent(typeof(KMService), typeof(KMGameInfo), typeof(KMModSettings))]
 public class ModuleSkinsService : MonoBehaviour
 {
+    [SerializeField]
+    public Dictionary<string, GameObject> Prefabs;
+
     #region Singleton Management
-    private static ModuleSkinsService Instance { get; set; }
+    public static ModuleSkinsService Instance { get; set; }
     private static bool _started;
 
     public void OnEnable()
@@ -24,13 +27,20 @@ public class ModuleSkinsService : MonoBehaviour
         Instance = this;
         if (!_started)
         {
-            _started = true;
-
-            ProcessSkins();
-
-            var gameInfo = GetComponent<KMGameInfo>();
-            gameInfo.OnStateChange += StateChange;
+            StartCoroutine(Init());
         }
+    }
+
+    private IEnumerator Init()
+    {
+        var gameInfo = GetComponent<KMGameInfo>();
+        gameInfo.OnStateChange += StateChange;
+
+        yield return null;
+
+        ProcessSkins();
+
+        _started = true;
     }
 
     public void OnDisable()
@@ -60,29 +70,34 @@ public class ModuleSkinsService : MonoBehaviour
         settings.RefreshSettings();
         bool dirty = false;
 
+        Debug.Log("[Module Skins] Reading settings...");
+
+        var jsettings = new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented,
+        };
+
         #region Read settings
         if (settings.Settings == "")
         {
             Debug.Log("[Module Skins] Empty or nonexistent settings file. Writing default values...");
-            settings.Settings = "{\"version\":1}";
+            settings.Settings = "{\"Version\":1,\"ModuleIds\":{}}";
             dirty = true;
         }
 
         try
         {
-            _settings = JsonConvert.DeserializeObject<Settings>(settings.Settings);
+            _settings = JsonConvert.DeserializeObject<Settings>(settings.Settings, jsettings);
         }
         catch (JsonException ex)
         {
             Debug.Log("[Module Skins] Exception when reading settings file. Overwriting with default values...");
             Debug.LogException(ex);
-            _settings = new Settings
-            {
-                Version = 1,
-                Modules = new Dictionary<string, Dictionary<string, int>>()
-            };
+            _settings = new Settings() { Version = 1, Modules = new Dictionary<string, Dictionary<string, int>>() };
             dirty = true;
         }
+
+        _settings.Modules = _settings.Modules ?? new Dictionary<string, Dictionary<string, int>>();
         #endregion
 
         #region Determine all valid skins
@@ -98,28 +113,28 @@ public class ModuleSkinsService : MonoBehaviour
 
         #region Remove excess skins
         List<string> excessModules = new List<string>();
-        foreach (var module in _settings.Modules)
+        foreach (var module in _settings.ModuleIds)
         {
             List<string> excessKeys = new List<string>();
             bool anyExist = false;
-            foreach (var name in module.Value)
+            foreach (var name in _settings.Skins(module))
             {
                 if (name.Key == Settings.DefaultSkinName)
                     continue;
-                if (!skinNamesSet.Contains(new SkinName(module.Key, name.Key)))
+                if (!skinNamesSet.Contains(new SkinName(module, name.Key)))
                     excessKeys.Add(name.Key);
                 else
                     anyExist = true;
             }
             if (!anyExist)
             {
-                excessModules.Add(module.Key);
+                excessModules.Add(module);
                 continue;
             }
             foreach (var key in excessKeys)
             {
-                Debug.LogFormat("[Module Skins] Found unknown skin '{0}.{1}'. Removing it.", module.Key, key);
-                module.Value.Remove(key);
+                Debug.LogFormat("[Module Skins] Found unknown skin '{0}.{1}'. Removing it.", module, key);
+                _settings.Remove(module, key);
             }
             if (excessKeys.Count > 0)
                 dirty = true;
@@ -127,7 +142,7 @@ public class ModuleSkinsService : MonoBehaviour
         foreach (var module in excessModules)
         {
             Debug.LogFormat("[Module Skins] Found unknown skin set '{0}'. Removing it.", module);
-            _settings.Modules.Remove(module);
+            _settings.Remove(module);
         }
         if (excessModules.Count > 0)
             dirty = true;
@@ -137,29 +152,32 @@ public class ModuleSkinsService : MonoBehaviour
         foreach (var name in skinNames)
         {
             Dictionary<string, int> dict;
-            if (!_settings.Modules.TryGetValue(name.Module, out dict))
+            if (!_settings.TryGetModule(name.Module, out dict))
             {
-                _settings.Modules[name.Module] = dict = new Dictionary<string, int>
+                _settings.AddModule(name.Module, dict = new Dictionary<string, int>
                 {
                     { Settings.DefaultSkinName, 0 }
-                };
+                });
+                Debug.LogFormat("[Module Skins] Inserting skin settings for skin set '{0}'.", name.Module);
                 dirty = true;
             }
             if (!dict.ContainsKey(Settings.DefaultSkinName))
             {
-                dict[Settings.DefaultSkinName] = 0;
+                _settings.AddSkin(name.Module, Settings.DefaultSkinName, 0);
+                Debug.LogFormat("[Module Skins] Inserting default skin settings for '{0}.{1}'.", name.Module, Settings.DefaultSkinName);
                 dirty = true;
             }
             if (!dict.ContainsKey(name.Name))
             {
-                dict[name.Name] = 1;
+                _settings.AddSkin(name.Module, name.Name, 1);
+                Debug.LogFormat("[Module Skins] Inserting default skin settings for '{0}.{1}'.", name.Module, name.Name);
                 dirty = true;
             }
         }
         #endregion
 
         if (dirty)
-            File.WriteAllText(settings.SettingsPath, JsonConvert.SerializeObject(_settings));
+            File.WriteAllText(settings.SettingsPath, JsonConvert.SerializeObject(_settings, jsettings));
     }
 
     private void ProcessSkins()
@@ -180,7 +198,7 @@ public class ModuleSkinsService : MonoBehaviour
     private static Type GetSkinFor(string moduleId)
     {
         Dictionary<string, int> dict;
-        if (!_settings.Modules.TryGetValue(moduleId, out dict))
+        if (!_settings.TryGetModule(moduleId, out dict))
             return null;
         var weight = dict.Values.Sum();
         if (weight == 0)
@@ -188,13 +206,19 @@ public class ModuleSkinsService : MonoBehaviour
             Debug.LogWarningFormat("[Module Skins] No skins enabled for module '{0}'. Using the default.", moduleId);
             return null;
         }
+
         var choice = UnityEngine.Random.Range(0, weight);
+        Debug.LogFormat("[Module Skins] Choosing from: {0} ({2}/{1})", dict.Select(kvp => kvp.Key + " = " + kvp.Value).Aggregate((a, b) => a + "; " + b), weight, choice);
+
         string chosen = null;
         foreach (var kvp in dict)
         {
             choice -= kvp.Value;
             if (choice < 0)
+            {
                 chosen = kvp.Key;
+                break;
+            }
         }
 
         if (chosen == Settings.DefaultSkinName)
@@ -209,11 +233,15 @@ public class ModuleSkinsService : MonoBehaviour
 
     private static IEnumerator OnEnterGameplay()
     {
+        if (!IsEnabled)
+            yield break;
+
         IList bombs = null;
         int bombCount = -1;
         yield return new WaitUntil(() => (bombCount = (bombs = ReflectionHelper.GameplayStateBombs).Count) != 0);
 
-        Debug.LogFormat("[Module Skins] {0} bombs{1} found.", bombs.Count, bombs.Count == 1 ? "" : "s");
+        Debug.LogFormat("[Module Skins] {0} bombs{1} found.", bombCount, bombCount == 1 ? "" : "s");
+        Instance.UpdateSettings();
         foreach (var bomb in bombs)
         {
             var bombObject = ((MonoBehaviour)bomb).gameObject;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-internal struct SkinName : IEquatable<SkinName>
+public struct SkinName : IEquatable<SkinName>
 {
     public readonly string Module, Name;
 
