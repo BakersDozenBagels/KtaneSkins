@@ -44,6 +44,7 @@ public abstract class ModuleSkin : MonoBehaviour
     /// </summary>
     protected virtual void OnNeedyDeactivation() { }
 
+    protected KMAudio Audio { get { return ModuleSkinsService.Instance.Audio; } }
     protected GameObject GetPrefab(string name)
     {
         GameObject go;

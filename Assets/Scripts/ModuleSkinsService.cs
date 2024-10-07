@@ -17,6 +17,7 @@ public class ModuleSkinsService : MonoBehaviour
     #region Singleton Management
     public static ModuleSkinsService Instance { get; set; }
     private static bool _started;
+    public KMAudio Audio { get; private set; }
 
     public void OnEnable()
     {
@@ -27,6 +28,7 @@ public class ModuleSkinsService : MonoBehaviour
             return;
         }
         Instance = this;
+        Audio = GetComponent<KMAudio>();
         if (!_started)
         {
             StartCoroutine(Init());

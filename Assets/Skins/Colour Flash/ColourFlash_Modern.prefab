@@ -205,7 +205,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4065060609657874}
-  - component: {fileID: 114685936216636254}
   m_Layer: 0
   m_Name: ColourFlash_Modern
   m_TagString: Untagged
@@ -979,17 +978,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseColor
---- !u!114 &114685936216636254
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1920755103584050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1675560866, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114697551852514948
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -43,10 +43,9 @@ public class BrainfSkin : ModuleSkin
         }
         parent.UpdateChildrenProperly();
 
-        var audio = skin.GetComponent<KMAudio>();
         parent.Children[10].OnInteract += () =>
         {
-            audio.PlaySoundAtTransform("Brainf_Rolodex_Solve", transform);
+            Audio.PlaySoundAtTransform("Brainf_Rolodex_Solve", transform);
             return false;
         };
 

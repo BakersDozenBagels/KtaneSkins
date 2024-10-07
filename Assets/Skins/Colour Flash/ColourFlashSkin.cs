@@ -10,7 +10,6 @@ public class ColourFlashSkin : ModuleSkin
 
     private TextMesh _screenText, _yesText, _noText;
     private Material _screenMat;
-    private KMAudio _audio;
 
     protected override void OnStart()
     {
@@ -41,8 +40,6 @@ public class ColourFlashSkin : ModuleSkin
         _screenText.gameObject.SetActive(false);
         _yesText.gameObject.SetActive(false);
         _noText.gameObject.SetActive(false);
-
-        _audio = skin.GetComponent<KMAudio>();
     }
 
     protected override void OnActivate()
@@ -62,7 +59,7 @@ public class ColourFlashSkin : ModuleSkin
         _screenText.gameObject.SetActive(false);
         _yesText.gameObject.SetActive(false);
         _noText.gameObject.SetActive(false);
-        _audio.PlaySoundAtTransform("ColourFlash_Modern_Solve", transform);
+        Audio.PlaySoundAtTransform("ColourFlash_Modern_Solve", transform);
         _screenMat.SetColor("_ColorB", Color.white);
         yield return new WaitForSeconds(UnityEngine.Random.Range(0.07f, 0.2f));
         _screenMat.SetColor("_ColorB", Color.black);
