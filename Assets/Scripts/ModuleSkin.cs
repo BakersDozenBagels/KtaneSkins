@@ -47,7 +47,7 @@ public abstract class ModuleSkin : MonoBehaviour
     protected GameObject GetPrefab(string name)
     {
         GameObject go;
-        if (!ModuleSkinsService.Instance.Prefabs.TryGetValue(name, out go))
+        if (!ModuleSkinsService.Instance.PrefabsLookup.TryGetValue(name, out go))
             throw new ArgumentException(
                 string.Format("That prefab ({0}) does not exist on the service instance.", name),
                 "name"

@@ -10,7 +10,9 @@ using UnityEngine;
 public class ModuleSkinsService : MonoBehaviour
 {
     [SerializeField]
-    public Dictionary<string, GameObject> Prefabs;
+    private GameObject[] _prefabs;
+    private Dictionary<string, GameObject> _prefabsDict;
+    public Dictionary<string, GameObject> PrefabsLookup { get { return _prefabsDict = _prefabsDict ?? _prefabs.ToDictionary(k => k.name, k => k); } }
 
     #region Singleton Management
     public static ModuleSkinsService Instance { get; set; }
