@@ -16,6 +16,7 @@ public class ColourFlashSkin : ModuleSkin
     {
         transform.GetChild(2).gameObject.SetActive(false);
         var skin = Instantiate(GetPrefab("ColourFlash_Modern"), transform);
+        skin.transform.localPosition = Vector3.zero;
 
         _screenText = skin.transform.Find("ScreenText").GetComponent<TextMesh>();
         _screenMat = skin.transform.Find("Screen").GetComponent<Renderer>().material;

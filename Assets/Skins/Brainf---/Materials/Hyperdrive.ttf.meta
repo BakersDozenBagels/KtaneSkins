@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2d7af2bb1b600df4092807138662e648
+guid: e72d6b813eb06fc4c8f3f575e1a16e51
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 4
   characterPadding: 0
   includeFontData: 1
-  fontName: VCR OSD Mono
+  fontName: Hyperdrive
   fontNames:
-  - VCR OSD Mono
+  - Hyperdrive
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
