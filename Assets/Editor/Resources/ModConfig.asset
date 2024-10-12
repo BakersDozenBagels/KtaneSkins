@@ -12,9 +12,35 @@ MonoBehaviour:
   m_Name: ModConfig
   m_EditorClassIdentifier: 
   id: ModuleSkins
-  title: Module Skinds
+  title: Module Skins
   author: BakersDozenBagels
-  description: 
-  version: 0.1
+  description: 'Allows you to reskin several modules. This mod is highly configurable,
+    so each skin can be toggled individually.
+
+
+    Currently contains three skins:
+
+    "Modern" for Colour Flash
+
+    "Rolodex" for Brainf---
+
+    "USA" for Simon States
+
+
+    How to use the settings file:
+
+    Each skin has a wight assigned to it. A skin will be randomly chosen per module,
+    with a higher weight being more likely to be chosen. Use a weight of 0 to completely
+    disable a skin. The special skin "$" represents the original unskinned look of
+    the module.
+
+
+    Find the source code here: https://github.com/BakersDozenBagels/KtaneSkins
+
+
+
+
+    More skins coming soon probably'
+  version: 1.0
   outputFolder: build
-  previewImage: {fileID: 2800000, guid: 9bde6bb171b053b46a7c66fdd93c9ec9, type: 3}
+  previewImage: {fileID: 2800000, guid: 3127dffd61a9ca9419576a227f0b3d60, type: 3}
