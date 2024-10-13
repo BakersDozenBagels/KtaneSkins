@@ -18,7 +18,7 @@ MonoBehaviour:
     so each skin can be toggled individually.
 
 
-    Currently contains four skins:
+    Currently contains five skins:
 
     "Modern" for Colour Flash
 
@@ -27,6 +27,8 @@ MonoBehaviour:
     "USA" for Simon States
 
     "WhatHow" for Literally Nothing
+
+    "Hologram" for The Plunger Button
 
 
     This mod is designed to never be beneficial during competitive play (it may be
@@ -49,6 +51,6 @@ MonoBehaviour:
 
 
     More skins coming soon probably'
-  version: 1.0
+  version: 1.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3127dffd61a9ca9419576a227f0b3d60, type: 3}
