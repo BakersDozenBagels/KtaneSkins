@@ -14,25 +14,41 @@ MonoBehaviour:
   id: ModuleSkins
   title: Module Skins
   author: BakersDozenBagels
-  description: 'Allows you to reskin several modules. This mod is highly configurable, so each skin can be toggled individually.
-
-Currently contains three skins:
-"Modern" for Colour Flash
-"Rolodex" for Brainf---
-"USA" for Simon States
-
-This mod is designed to never be beneficial during competitive play (it may be detrimental). The only exception to this is in identification of similar-looking modules.
-
-This mod does not include the original modules, it merely modifies them during gameplay.
-
-How to use the settings file:
-Each skin has a weight assigned to it. A skin will be randomly chosen per module, with a higher weight being more likely to be chosen. Use a weight of 0 to completely disable a skin. The special skin "$" represents the original unskinned look of the module.
-
-Find the source code here: https://github.com/BakersDozenBagels/KtaneSkins
+  description: 'Allows you to reskin several modules. This mod is highly configurable,
+    so each skin can be toggled individually.
 
 
+    Currently contains four skins:
 
-More skins coming soon probably'
+    "Modern" for Colour Flash
+
+    "Rolodex" for Brainf---
+
+    "USA" for Simon States
+
+    "WhatHow" for Literally Nothing
+
+
+    This mod is designed to never be beneficial during competitive play (it may be
+    detrimental). The only exception to this is in identification of similar-looking
+    modules.
+
+
+    This mod does not include the original modules, it merely modifies them during
+    gameplay.
+
+
+    How to use the settings file: Each skin has a weight assigned to it. A skin will
+    be randomly chosen per module, with a higher weight being more likely to be chosen.
+    Use a weight of 0 to completely disable a skin. The special skin "$" represents
+    the original unskinned look of the module.
+
+
+    Find the source code here: https://github.com/BakersDozenBagels/KtaneSkins
+
+
+
+    More skins coming soon probably'
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3127dffd61a9ca9419576a227f0b3d60, type: 3}

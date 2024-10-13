@@ -180,7 +180,7 @@ public class ModuleSkinsService : MonoBehaviour
         }
         #endregion
 
-        if (dirty)
+        if (dirty &&!Application.isEditor)
             File.WriteAllText(settings.SettingsPath, JsonConvert.SerializeObject(_settings, jsettings));
     }
 
