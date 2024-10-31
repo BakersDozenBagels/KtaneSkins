@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class ColourFlashSkin : ModuleSkin
@@ -14,8 +13,7 @@ public class ColourFlashSkin : ModuleSkin
     protected override void OnStart()
     {
         transform.GetChild(2).gameObject.SetActive(false);
-        var skin = Instantiate(GetPrefab("ColourFlash_Modern"), transform);
-        skin.transform.localPosition = Vector3.zero;
+        var skin = AddPrefab();
 
         _screenText = skin.transform.Find("ScreenText").GetComponent<TextMesh>();
         _screenMat = skin.transform.Find("Screen").GetComponent<Renderer>().material;
@@ -27,15 +25,8 @@ public class ColourFlashSkin : ModuleSkin
 
         var yesSel = _yesText.GetComponent<KMSelectable>();
         var noSel = _noText.GetComponent<KMSelectable>();
-        var compSel = GetComponent<KMSelectable>();
 
-        yesSel.OnInteract = compSel.Children[0].OnInteract;
-        yesSel.Parent = compSel;
-        noSel.OnInteract = compSel.Children[1].OnInteract;
-        noSel.Parent = compSel;
-
-        compSel.Children = new KMSelectable[] { yesSel, noSel };
-        compSel.UpdateChildrenProperly();
+        SetSelectableChildren(yesSel, noSel);
 
         _screenText.gameObject.SetActive(false);
         _yesText.gameObject.SetActive(false);

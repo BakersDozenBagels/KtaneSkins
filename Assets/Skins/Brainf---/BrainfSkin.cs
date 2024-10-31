@@ -12,8 +12,7 @@ public class BrainfSkin : ModuleSkin
 
     protected override void OnStart()
     {
-        var skin = Instantiate(GetPrefab("Brainf_Rolodex"), transform);
-        skin.transform.localPosition = Vector3.zero;
+        var skin = AddPrefab("Brainf_Rolodex");
         _rolodex = skin.GetComponentInChildren<Animator>();
 
         var mainScreen = transform.GetChild(2);
@@ -27,30 +26,29 @@ public class BrainfSkin : ModuleSkin
         // Stage screen
         transform.GetChild(3).gameObject.SetActive(false);
 
-        var parent = GetComponent<KMSelectable>();
+        KMSelectable[] children = new KMSelectable[12];
         for (int i = 0; i < 12; ++i)
         {
-            var button = skin.transform.GetChild(2).GetChild(i).GetComponent<KMSelectable>();
+            var button = skin.GetChild(2).GetChild(i).GetComponent<KMSelectable>();
             var pos = button.transform.localPosition;
-            button.Parent = parent;
-            button.OnInteract = parent.Children[i].OnInteract;
             button.OnInteract += () =>
             {
                 StartCoroutine(AnimateButton(button.transform, pos));
                 return false;
             };
-            parent.Children[i] = button;
+            children[i] = button;
         }
-        parent.UpdateChildrenProperly();
 
-        parent.Children[10].OnInteract += () =>
+        children[10].OnInteract += () =>
         {
             Audio.PlaySoundAtTransform("Brainf_Rolodex_Solve", transform);
             return false;
         };
 
+        SetSelectableChildren(children);
+
         var comp = GetComponent("BrainfScript");
-        comp.GetType().SetField("stageMesh", comp, skin.transform.GetChild(3).GetComponentInChildren<TextMesh>());
+        comp.GetType().SetField("stageMesh", comp, skin.GetChild(3).GetComponentInChildren<TextMesh>());
 
         StartCoroutine(AnimateRolodex());
     }

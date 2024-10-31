@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlungerButtonHologram : ModuleSkin
@@ -22,8 +20,7 @@ public class PlungerButtonHologram : ModuleSkin
 
     protected override void OnStart()
     {
-        var skin = Instantiate(GetPrefab("plungerButton_Hologram"), transform).transform;
-        skin.localPosition = Vector3.zero;
+        var skin = AddPrefab();
 
         var fakeSurface = skin.GetChild(2).GetComponent<Renderer>();
         var comp = GetComponent("plungerButtonScript");
@@ -33,16 +30,11 @@ public class PlungerButtonHologram : ModuleSkin
         _surfaceOff = _surface.material;
         _surfaceOn = fakeSurface.material;
 
-        var child = skin.GetChild(0).GetComponent<KMSelectable>();
-        var parent = GetComponent<KMSelectable>();
-        parent.Children[0].OnInteract += Press;
-        parent.Children[0].OnInteractEnded += Release;
-        child.OnInteract = parent.Children[0].OnInteract;
-        child.OnInteractEnded = parent.Children[0].OnInteractEnded;
-        child.Parent = parent;
-        parent.Children[0] = child;
-        parent.Parent = null; // The original has Parent set to itself, which freezes the game after CopySettingsFromProxy() and interacting with the bomb.
-        parent.UpdateChildrenProperly();
+        var button = skin.GetChild(0).GetComponent<KMSelectable>();
+        SetSelectableChildren(button);
+        
+        button.OnInteract += Press;
+        button.OnInteractEnded += Release;
 
         // Original button
         transform.GetChild(1).gameObject.SetActive(false);

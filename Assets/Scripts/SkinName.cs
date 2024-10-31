@@ -40,7 +40,7 @@ public struct SkinName : IEquatable<SkinName>
         return !(left == right);
     }
 
-    private const char Separator = '.';
+    private const char Separator = '_';
 
     public override string ToString()
     {

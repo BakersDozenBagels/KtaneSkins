@@ -14,8 +14,7 @@ public abstract class ModuleSkin : MonoBehaviour
     public abstract string Name { get; }
 
     /// <summary>
-    /// Called once ever. Use this to set up Harmony patches.
-    /// Be sure to disable them if <see cref="ModuleSkinService.IsEnabled"/> is <see langword="false"/>.
+    /// Called once ever. Use this to set up cached reflection.
     /// </summary>
     protected virtual void Initialize() { }
     /// <summary>
@@ -44,7 +43,20 @@ public abstract class ModuleSkin : MonoBehaviour
     /// </summary>
     protected virtual void OnNeedyDeactivation() { }
 
+    /// <summary>
+    /// The mod's <see cref="KMAudio"/>.
+    /// </summary>
     protected KMAudio Audio { get { return ModuleSkinsService.Instance.Audio; } }
+    [Obsolete("Use Audio instead.")]
+#pragma warning disable IDE1006 // Naming Styles
+    protected new KMAudio audio { get { return Audio; } }
+#pragma warning restore IDE1006 // Naming Styles
+    /// <summary>
+    /// Get a prefab from the mod service.
+    /// </summary>
+    /// <param name="name">The name of the prefab to get.</param>
+    /// <returns>The original prefab.</returns>
+    /// <remarks>Be sure to <see cref="UnityEngine.Object.Instantiate(UnityEngine.Object)"/> the returned prefab.</remarks>
     protected GameObject GetPrefab(string name)
     {
         GameObject go;
@@ -55,20 +67,100 @@ public abstract class ModuleSkin : MonoBehaviour
             );
         return go;
     }
+    /// <summary>
+    /// Adds the skin's default prefab to the module.
+    /// </summary>
+    /// <returns>The instantiated prefab's transform.</returns>
+    protected Transform AddPrefab() { return AddPrefab(SkinName.ToString()); }
+    /// <summary>
+    /// Adds the specified prefab to the module.
+    /// </summary>
+    /// <returns>The instantiated prefab's transform.</returns>
+    protected Transform AddPrefab(string name)
+    {
+        var skin = Instantiate(GetPrefab(name), transform).transform;
+        skin.localPosition = Vector3.zero;
+        return skin;
+    }
+    /// <summary>
+    /// Copies callbacks from the mod's children selectables to the corresponding new ones and sets the new selectables as the children.
+    /// </summary>
+    /// <param name="arr">The new child selectables.</param>
+    protected void SetSelectableChildren(params KMSelectable[] arr) { SetSelectableChildren(null, arr); }
+    /// <summary>
+    /// Copies callbacks from the mod's children selectables to the corresponding new ones and sets the new selectables as the children.
+    /// </summary>
+    /// <param name="rowLength">The new <see cref="KMSelectable.ChildRowLength"/> to use.</param>
+    /// <param name="arr">The new child selectables.</param>
+    protected void SetSelectableChildren(int? rowLength, params KMSelectable[] arr)
+    {
+        var parent = GetComponent<KMSelectable>();
+        if (parent.Children.Length != arr.Length)
+            throw new ArgumentException("Wrong number of KMSelectable children: " + arr.Length + "/" + parent.Children.Length);
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            var orig = parent.Children[i];
+            parent.Children[i] = arr[i];
+
+            if (arr[i] == null)
+                continue;
+
+            arr[i].Parent = parent;
+            arr[i].OnCancel += () => { return orig.OnCancel == null || orig.OnCancel(); };
+            arr[i].OnDefocus += () => { if (orig.OnDefocus != null) orig.OnDefocus(); };
+            arr[i].OnDeselect += () => { if (orig.OnDeselect != null) orig.OnDeselect(); };
+            arr[i].OnFocus += () => { if (orig.OnFocus != null) orig.OnFocus(); };
+            arr[i].OnHighlight += () => { if (orig.OnHighlight != null) orig.OnHighlight(); };
+            arr[i].OnHighlightEnded += () => { if (orig.OnHighlightEnded != null) orig.OnHighlightEnded(); };
+            arr[i].OnInteract += () => { return orig.OnInteract != null && orig.OnInteract(); };
+            arr[i].OnInteractEnded += () => { if (orig.OnInteractEnded != null) orig.OnInteractEnded(); };
+            arr[i].OnLeft += () => { if (orig.OnLeft != null) orig.OnLeft(); };
+            arr[i].OnRight += () => { if (orig.OnRight != null) orig.OnRight(); };
+            arr[i].OnSelect += () => { if (orig.OnSelect != null) orig.OnSelect(); };
+        }
+
+        if (rowLength != null)
+            parent.ChildRowLength = rowLength.Value;
+
+        parent.Parent = null;
+        parent.UpdateChildrenProperly();
+    }
+    /// <summary>
+    /// <see langword="true"/> if and only if the attached <see cref="KMBombModule"/> is solved.
+    /// </summary>
+    protected bool IsSolved { get; private set; }
 
     private string _loggingTag;
     private string LoggingTag { get { return _loggingTag = _loggingTag ?? string.Format("[Module Skins] [{0}] ", SkinName); } }
+    /// <summary>
+    /// Log a message with the correct logging tag.
+    /// </summary>
+    /// <param name="message">The message to log.</param>
     protected void Log(string message)
     {
         Debug.Log(LoggingTag + message);
     }
+    /// <summary>
+    /// Log a formatted message with the correct logging tag.
+    /// </summary>
+    /// <param name="message">The message to log.</param>
+    /// <param name="args">The format arguments to interpolate into the message.</param>
     protected void LogFormat(string message, params string[] args)
     {
         Debug.LogFormat(LoggingTag + message, args);
     }
 
     private static readonly HashSet<SkinName> s_initialized = new HashSet<SkinName>();
+    /// <summary>
+    /// The compound name of this skin.
+    /// </summary>
     public SkinName SkinName { get { return new SkinName(ModuleId, Name); } }
+    /// <summary>
+    /// DO NOT USE IN SKIN. Used by the service to perform housekeeping functions.
+    /// </summary>
+    /// <param name="solvable"></param>
+    /// <param name="needy"></param>
     public void Begin(KMBombModule solvable, KMNeedyModule needy)
     {
         if (s_initialized.Add(SkinName))
@@ -76,7 +168,7 @@ public abstract class ModuleSkin : MonoBehaviour
 
         if (solvable != null)
         {
-            solvable.OnPass += () => { OnSolve(); return false; };
+            solvable.OnPass += () => { OnSolve(); IsSolved = true; return false; };
             solvable.OnStrike += () => { OnStrike(); return false; };
             solvable.OnActivate += OnActivate;
         }
