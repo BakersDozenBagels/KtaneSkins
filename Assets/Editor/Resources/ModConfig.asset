@@ -14,43 +14,19 @@ MonoBehaviour:
   id: ModuleSkins
   title: Module Skins
   author: BakersDozenBagels
-  description: 'Allows you to reskin several modules. This mod is highly configurable,
-    so each skin can be toggled individually.
-
-
-    Currently contains five skins:
-
-    "Modern" for Colour Flash
-
-    "Rolodex" for Brainf---
-
-    "USA" for Simon States
-
-    "WhatHow" for Literally Nothing
-
-    "Hologram" for The Plunger Button
-
-
-    This mod is designed to never be beneficial during competitive play (it may be
-    detrimental). The only exception to this is in identification of similar-looking
-    modules.
-
-
-    This mod does not include the original modules, it merely modifies them during
-    gameplay.
-
-
-    How to use the settings file: Each skin has a weight assigned to it. A skin will
-    be randomly chosen per module, with a higher weight being more likely to be chosen.
-    Use a weight of 0 to completely disable a skin. The special skin "$" represents
-    the original unskinned look of the module.
-
-
-    Find the source code here: https://github.com/BakersDozenBagels/KtaneSkins
-
-
-
-    More skins coming soon probably'
+  description: "Allows you to reskin several modules. This mod is highly configurable,
+    so each skin can be toggled individually.\r\n\r\nCurrently contains six skins:\r\n\"Modern\"
+    for Colour Flash\r\n\"Rolodex\" for Brainf---\r\n\"USA\" for Simon States\r\n\"WhatHow\"
+    for Literally Nothing\r\n\"Hologram\" for The Plunger Button\r\n\"ONE\" for The
+    Radio\r\n\r\nThis mod is designed to never be beneficial during competitive play
+    (it may be detrimental). The only exception to this is in identification of similar-looking
+    modules.\r\n\r\nThis mod does not include the original modules, it merely modifies
+    them during gameplay.\r\n\r\nHow to use the settings file: Each skin has a weight
+    assigned to it. A skin will be randomly chosen per module, with a higher weight
+    being more likely to be chosen. Use a weight of 0 to completely disable a skin.
+    The special skin \"$\" represents the original unskinned look of the module.\r\n\r\nFind
+    the source code here: https://github.com/BakersDozenBagels/KtaneSkins\r\n\r\n\r\nMore
+    skins coming soon probably! Feel free to make suggestions, also."
   version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3127dffd61a9ca9419576a227f0b3d60, type: 3}
