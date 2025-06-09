@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1834881521624104}
+  m_IsPrefabParent: 1
+--- !u!1 &1834881521624104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4869287423261154}
+  - component: {fileID: 114394071189592158}
+  m_Layer: 0
+  m_Name: AppreciateArt_EaTEoT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4869287423261154
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1834881521624104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114394071189592158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1834881521624104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b2660b585b7d94b82516b706a56b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Art:
+  - {fileID: 2800000, guid: 7c503ed9dde360848bc5eb35f51c92c5, type: 3}
+  - {fileID: 2800000, guid: 4bd5f52be46acc545b3aba43ff7e7f64, type: 3}
+  - {fileID: 2800000, guid: 0f9baf4af82a3c94281eb1d2429344b2, type: 3}
+  - {fileID: 2800000, guid: 71a01712f1c879b43ba0c13e9b25eccc, type: 3}
+  - {fileID: 2800000, guid: 4d29fa0a6a78c4c4d819be6237574082, type: 3}
+  - {fileID: 2800000, guid: a47cd7dfb02b9534299f8c420dcd3bbd, type: 3}
+  PostProcessMaterial: {fileID: 2100000, guid: 938fbe0271039724796b6588d2fd9c9c, type: 2}
+  Audio: {fileID: 8300000, guid: cb4ccec719026ca4cb1ad02ff79926bf, type: 3}

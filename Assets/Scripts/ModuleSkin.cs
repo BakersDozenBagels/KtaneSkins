@@ -52,6 +52,15 @@ public abstract class ModuleSkin : MonoBehaviour
     protected new KMAudio audio { get { return Audio; } }
 #pragma warning restore IDE1006 // Naming Styles
     /// <summary>
+    /// Get the skin's default prefab.
+    /// </summary>
+    /// <returns>The original prefab.</returns>
+    /// <remarks>Be sure to <see cref="UnityEngine.Object.Instantiate(UnityEngine.Object)"/> the returned prefab.</remarks>
+    protected GameObject GetPrefab()
+    {
+        return GetPrefab(SkinName.ToString());
+    }
+    /// <summary>
     /// Get a prefab from the mod service.
     /// </summary>
     /// <param name="name">The name of the prefab to get.</param>

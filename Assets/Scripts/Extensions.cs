@@ -21,4 +21,8 @@ public static class Extensions
     {
         t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, z);
     }
+    public static T PickRandom<T>(this T[] arr)
+    {
+        return arr[Random.Range(0, arr.Length)];
+    }
 }
