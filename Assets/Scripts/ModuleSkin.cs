@@ -160,6 +160,13 @@ public abstract class ModuleSkin : MonoBehaviour
         Debug.LogFormat(LoggingTag + message, args);
     }
 
+    /// <summary>
+    /// Sounds to replace with ones from this mod.
+    /// </summary>
+    protected virtual Dictionary<string, string> SoundOverrides { get { return new Dictionary<string, string>(); } }
+
+    protected virtual void OnSound(string name, Transform transform, bool isByRef) { }
+
     private static readonly HashSet<SkinName> s_initialized = new HashSet<SkinName>();
     /// <summary>
     /// The compound name of this skin.
@@ -191,5 +198,33 @@ public abstract class ModuleSkin : MonoBehaviour
         }
 
         OnStart();
+
+        var overrides = SoundOverrides;
+        var audio = GetComponent<KMAudio>();
+        var origHandlerRef = audio.HandlePlaySoundAtTransformWithRef;
+        audio.HandlePlaySoundAtTransformWithRef = (string name, Transform transform, bool loop) =>
+        {
+            string newName;
+            KMAudio.KMAudioRef ret;
+            if (overrides.TryGetValue(name, out newName))
+                ret = Audio.PlaySoundAtTransformWithRef(newName, transform);
+            else
+                ret = origHandlerRef(name, transform, loop);
+
+            OnSound(name, transform, true);
+            return ret;
+        };
+
+        var origHandler = audio.HandlePlaySoundAtTransform;
+        audio.HandlePlaySoundAtTransform = (string name, Transform transform) =>
+        {
+            string newName;
+            if (overrides.TryGetValue(name, out newName))
+                Audio.PlaySoundAtTransform(newName, transform);
+            else
+                origHandler(name, transform);
+
+            OnSound(name, transform, false);
+        };
     }
 }

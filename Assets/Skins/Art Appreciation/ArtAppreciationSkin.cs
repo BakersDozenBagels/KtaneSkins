@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArtAppreciationSkin : ModuleSkin
@@ -17,6 +18,8 @@ public class ArtAppreciationSkin : ModuleSkin
         s_setPostProcessMaterial = (c, m) => fldPostProcessMat.SetValue(c, m);
     }
 
+    protected override Dictionary<string, string> SoundOverrides { get { return new Dictionary<string, string>() { { "Ambient", GetPrefab().GetComponent<ArtAppreciationArt>().Audio.name } }; } }
+
     protected override void OnStart()
     {
         var prefab = GetPrefab().GetComponent<ArtAppreciationArt>();
@@ -29,15 +32,5 @@ public class ArtAppreciationSkin : ModuleSkin
         picFrame.GetChild(3).GetChild(0).GetComponent<TextMesh>().text = "ART ~ Ivan Seal";
 
         PostProcessMaterial = prefab.PostProcessMaterial;
-
-        var audio = GetComponent<KMAudio>();
-        var origHandler = audio.HandlePlaySoundAtTransformWithRef;
-        audio.HandlePlaySoundAtTransformWithRef = (string name, Transform transform, bool loop) =>
-        {
-            if (name != "Ambient")
-                return origHandler(name, transform, loop);
-
-            return Audio.PlaySoundAtTransformWithRef(prefab.Audio.name, transform);
-        };
     }
 }
