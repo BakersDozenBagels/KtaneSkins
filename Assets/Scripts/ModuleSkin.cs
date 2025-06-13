@@ -199,32 +199,35 @@ public abstract class ModuleSkin : MonoBehaviour
 
         OnStart();
 
-        var overrides = SoundOverrides;
         var audio = GetComponent<KMAudio>();
-        var origHandlerRef = audio.HandlePlaySoundAtTransformWithRef;
-        audio.HandlePlaySoundAtTransformWithRef = (string name, Transform transform, bool loop) =>
+        if (audio)
         {
-            string newName;
-            KMAudio.KMAudioRef ret;
-            if (overrides.TryGetValue(name, out newName))
-                ret = Audio.PlaySoundAtTransformWithRef(newName, transform);
-            else
-                ret = origHandlerRef(name, transform, loop);
+            var overrides = SoundOverrides;
+            var origHandlerRef = audio.HandlePlaySoundAtTransformWithRef;
+            audio.HandlePlaySoundAtTransformWithRef = (string name, Transform transform, bool loop) =>
+            {
+                string newName;
+                KMAudio.KMAudioRef ret;
+                if (overrides.TryGetValue(name, out newName))
+                    ret = Audio.PlaySoundAtTransformWithRef(newName, transform);
+                else
+                    ret = origHandlerRef(name, transform, loop);
 
-            OnSound(name, transform, true);
-            return ret;
-        };
+                OnSound(name, transform, true);
+                return ret;
+            };
 
-        var origHandler = audio.HandlePlaySoundAtTransform;
-        audio.HandlePlaySoundAtTransform = (string name, Transform transform) =>
-        {
-            string newName;
-            if (overrides.TryGetValue(name, out newName))
-                Audio.PlaySoundAtTransform(newName, transform);
-            else
-                origHandler(name, transform);
+            var origHandler = audio.HandlePlaySoundAtTransform;
+            audio.HandlePlaySoundAtTransform = (string name, Transform transform) =>
+            {
+                string newName;
+                if (overrides.TryGetValue(name, out newName))
+                    Audio.PlaySoundAtTransform(newName, transform);
+                else
+                    origHandler(name, transform);
 
-            OnSound(name, transform, false);
-        };
+                OnSound(name, transform, false);
+            };
+        }
     }
 }

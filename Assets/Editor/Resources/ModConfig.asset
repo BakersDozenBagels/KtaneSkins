@@ -27,6 +27,6 @@ MonoBehaviour:
     Use a weight of 0 to completely disable a skin. The special skin \"$\" represents
     the original unskinned look of the module.\r\n\r\nFind the source code here: https://github.com/BakersDozenBagels/KtaneSkins\r\n\r\n\r\nMore
     skins coming soon probably! Feel free to make suggestions, also."
-  version: 1.3
+  version: 1.4.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3127dffd61a9ca9419576a227f0b3d60, type: 3}
