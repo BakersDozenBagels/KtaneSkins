@@ -9,7 +9,7 @@ Skins are designed to not be advantageous, outside of identifying modules.
 
 Skins are chosen randomly, weighted by the configuration settings.
 
-For example, this configuration will choose the vanilla look for Art Appreciation 6/13ths of the time, and the EaTEoT skin 7/13ths of the time:
+For example, this configuration will choose the vanilla look for Art Appreciation 7/13ths of the time, and the EaTEoT skin 6/13ths of the time:
 
 ```json
 "AppreciateArt": {
@@ -19,6 +19,8 @@ For example, this configuration will choose the vanilla look for Art Appreciatio
 ```
 
 New modules are added to the settings automatically. The default `$` skin is set to have 0 weight, and each other skin is set to have 1 weight by default.
+
+Note that if no skin is enabled, then the default will be used.
 
 # Contributing
 
