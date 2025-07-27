@@ -1,9 +1,45 @@
-Community fork of the KTaNE Modkit.
+# KTANE Module Skins
 
-The [original (official) modkit](https://github.com/keeptalkinggame/ktanemodkit) isn't going to receive updates anymore. This is the fork that will be maintained from now on.
+This mod contains skins for modded modules.
+SKins are applied on top of the existing prefabs; as such, the original modules are not redistributed.
 
-Community-made plugins can be installed at the `Keep Talking ModKit > Plugins` menupoint.
+Skins are designed to not be advantageous, outside of identifying modules.
 
-[Documentation](https://github.com/Qkrisi/ktanemodkit/wiki)
+## Configuration
 
-To get more help, join the [Keep Talking and Nobody Explodes](https://discord.gg/ktane) or the [KTaNE Modding](https://discord.gg/qzy7Gdz) Discord servers.
+Skins are chosen randomly, weighted by the configuration settings.
+
+For example, this configuration will choose the vanilla look for Art Appreciation 6/13ths of the time, and the EaTEoT skin 7/13ths of the time:
+
+```json
+"AppreciateArt": {
+    "$": 7,
+    "EaTEoT": 6
+}
+```
+
+New modules are added to the settings automatically. The default `$` skin is set to have 0 weight, and each other skin is set to have 1 weight by default.
+
+# Contributing
+
+To make a new skin, create a new directory in `Assets/Skins`, and within, create a script for the skin derived from `ModuleSkin`.
+Override `ModuleId` and `Name` appropriately.
+
+`ModuleSkinService` will then automatically detect and load the skin.
+Note that the skin script will be added as a component to the service (to read its metadata), so Unity messages such as `Start` should not be used.
+
+## Changing Audio
+
+To change audio, override the `SoundOverrides` property. This maps from audio clip names in the source mod to audio clip names in this mod.
+
+## Changing Visuals
+
+When `OnStart` is called, your script will already be attached to the module as a component. This means you can access `transform` to get parts of the source prefab.
+
+To add new parts to the module, use `AddPrefab()`. This will instantiate a prefab registered with the service as a child of the skinned module. These are looked up by name, and the name defaults to `$"{ModuleID}_{Name}"`.
+
+If you only need a shared prefab instance (e.g. to get a `Texture` in Art Appreciation), you can use `GetPrefab()` to retrieve it.
+
+## Reflection
+
+Any reflection should be cached, and ideally done using `System.Linq.Expressions`. This should happen in `Initialize()`.

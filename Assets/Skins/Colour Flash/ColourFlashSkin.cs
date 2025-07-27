@@ -52,9 +52,9 @@ public class ColourFlashSkin : ModuleSkin
         _noText.gameObject.SetActive(false);
         Audio.PlaySoundAtTransform("ColourFlash_Modern_Solve", transform);
         _screenMat.SetColor("_ColorB", Color.white);
-        yield return new WaitForSeconds(UnityEngine.Random.Range(0.07f, 0.2f));
+        yield return new WaitForSeconds(Random.Range(0.07f, 0.2f));
         _screenMat.SetColor("_ColorB", Color.black);
-        yield return new WaitForSeconds(UnityEngine.Random.Range(0.07f, 0.2f));
+        yield return new WaitForSeconds(Random.Range(0.07f, 0.2f));
         _screenMat.SetColor("_ColorB", Color.green);
     }
 
@@ -69,7 +69,7 @@ public class ColourFlashSkin : ModuleSkin
         _yesText.gameObject.SetActive(false);
         _noText.gameObject.SetActive(false);
         _screenMat.SetColor("_ColorB", Color.red);
-        yield return new WaitForSeconds(UnityEngine.Random.Range(0.95f, 1.05f));
+        yield return new WaitForSeconds(Random.Range(0.95f, 1.05f));
         _screenText.gameObject.SetActive(true);
         _yesText.gameObject.SetActive(true);
         _noText.gameObject.SetActive(true);
