@@ -38,7 +38,7 @@ public class YippeeSkin : ModuleSkin
         mats[3] = mats[2];
     }
 
-    protected override void OnSound(string name, Transform transform, bool isByRef)
+    protected override void OnSound(string name, Transform transform, KMAudio.KMAudioRef audioRef)
     {
         if (name == "solve sound")
             StartCoroutine(Anim());

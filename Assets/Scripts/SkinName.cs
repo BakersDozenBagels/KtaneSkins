@@ -12,15 +12,9 @@ public struct SkinName : IEquatable<SkinName>
         Name = name;
     }
 
-    public override bool Equals(object other)
-    {
-        return other is SkinName && Equals((SkinName)other);
-    }
+    public override bool Equals(object other) { return other is SkinName && Equals((SkinName)other); }
 
-    public bool Equals(SkinName other)
-    {
-        return Module == other.Module && Name == other.Name;
-    }
+    public bool Equals(SkinName other) { return Module == other.Module && Name == other.Name; }
 
     public override int GetHashCode()
     {
@@ -30,15 +24,11 @@ public struct SkinName : IEquatable<SkinName>
         return hashCode;
     }
 
-    public static bool operator ==(SkinName left, SkinName right)
-    {
-        return left.Equals(right);
-    }
+    public static bool operator ==(SkinName left, SkinName right) { return left.Equals(right); }
 
-    public static bool operator !=(SkinName left, SkinName right)
-    {
-        return !(left == right);
-    }
+    public static bool operator !=(SkinName left, SkinName right) { return !(left == right); }
+
+    public static implicit operator string(SkinName skin) { return skin.ToString(); }
 
     private const char Separator = '_';
 
@@ -56,7 +46,7 @@ public struct SkinName : IEquatable<SkinName>
         var split = input.IndexOf(Separator);
         if (split != input.LastIndexOf(Separator))
         {
-            result = new SkinName();
+            result = default(SkinName);
             return false;
         }
         result = new SkinName(input.Substring(0, split), input.Substring(split + 1));

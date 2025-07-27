@@ -9,7 +9,7 @@ public abstract class ModuleSkin : MonoBehaviour
     /// </summary>
     public abstract string ModuleId { get; }
     /// <summary>
-    /// The name of this skin to appears in settings.
+    /// The name of this skin as it appears in settings.
     /// </summary>
     public abstract string Name { get; }
 
@@ -58,7 +58,7 @@ public abstract class ModuleSkin : MonoBehaviour
     /// <remarks>Be sure to <see cref="UnityEngine.Object.Instantiate(UnityEngine.Object)"/> the returned prefab.</remarks>
     protected GameObject GetPrefab()
     {
-        return GetPrefab(SkinName.ToString());
+        return GetPrefab(SkinName);
     }
     /// <summary>
     /// Get a prefab from the mod service.
@@ -80,7 +80,7 @@ public abstract class ModuleSkin : MonoBehaviour
     /// Adds the skin's default prefab to the module.
     /// </summary>
     /// <returns>The instantiated prefab's transform.</returns>
-    protected Transform AddPrefab() { return AddPrefab(SkinName.ToString()); }
+    protected Transform AddPrefab() { return AddPrefab(SkinName); }
     /// <summary>
     /// Adds the specified prefab to the module.
     /// </summary>
@@ -165,7 +165,13 @@ public abstract class ModuleSkin : MonoBehaviour
     /// </summary>
     protected virtual Dictionary<string, string> SoundOverrides { get { return new Dictionary<string, string>(); } }
 
-    protected virtual void OnSound(string name, Transform transform, bool isByRef) { }
+    /// <summary>
+    /// Called after the skinned module plays a sound.
+    /// </summary>
+    /// <param name="name">The name of the sound being played</param>
+    /// <param name="transform">The transform the sound is being played at</param>
+    /// <param name="audioRef">The audio ref for the played sound, or <see langword="null"/> if the sound does not have one</param>
+    protected virtual void OnSound(string name, Transform transform, KMAudio.KMAudioRef audioRef) { }
 
     private static readonly HashSet<SkinName> s_initialized = new HashSet<SkinName>();
     /// <summary>
@@ -213,7 +219,7 @@ public abstract class ModuleSkin : MonoBehaviour
                 else
                     ret = origHandlerRef(name, transform, loop);
 
-                OnSound(name, transform, true);
+                OnSound(name, transform, ret);
                 return ret;
             };
 
@@ -226,7 +232,7 @@ public abstract class ModuleSkin : MonoBehaviour
                 else
                     origHandler(name, transform);
 
-                OnSound(name, transform, false);
+                OnSound(name, transform, null);
             };
         }
     }
