@@ -1,9 +1,9 @@
 # KTANE Module Skins
 
 This mod contains skins for modded modules.
-SKins are applied on top of the existing prefabs; as such, the original modules are not redistributed.
+Skins are applied on top of the existing prefabs; as such, the original modules are not redistributed.
 
-Skins are designed to not be advantageous, outside of identifying modules.
+Skins are designed to not be advantageous in a competitive setting, outside of helping to identify modules.
 
 ## Configuration
 
