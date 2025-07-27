@@ -163,6 +163,9 @@ public abstract class ModuleSkin : MonoBehaviour
     /// <summary>
     /// Sounds to replace with ones from this mod.
     /// </summary>
+    /// <remarks>
+    /// This is only evaluated once, just after <see cref="OnStart" />.
+    /// </remarks>
     protected virtual Dictionary<string, string> SoundOverrides { get { return new Dictionary<string, string>(); } }
 
     /// <summary>
