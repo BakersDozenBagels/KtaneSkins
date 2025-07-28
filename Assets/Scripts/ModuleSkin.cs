@@ -135,6 +135,29 @@ public abstract class ModuleSkin : MonoBehaviour
         parent.Parent = null;
         parent.UpdateChildrenProperly();
     }
+
+    /// <summary>
+    /// Replaces the mod's children selectables with the corresponding new ones and sets the new selectables as the children.
+    /// </summary>
+    /// <param name="arr">The new child selectables.</param>
+    protected void ReplaceSelectableChildren(params KMSelectable[] arr) { ReplaceSelectableChildren(null, arr); }
+    /// <summary>
+    /// Replaces the mod's children selectables with the corresponding new ones and sets the new selectables as the children.
+    /// </summary>
+    /// <param name="rowLength">The new <see cref="KMSelectable.ChildRowLength"/> to use.</param>
+    /// <param name="arr">The new child selectables.</param>
+    protected void ReplaceSelectableChildren(int? rowLength, params KMSelectable[] arr)
+    {
+        var parent = GetComponent<KMSelectable>();
+        parent.Children = arr;
+        parent.ChildRowLength = rowLength ?? parent.ChildRowLength;
+        for (int i = 0; i < arr.Length; i++)
+            arr[i].Parent = parent;
+
+        parent.Parent = null;
+        parent.UpdateChildrenProperly();
+    }
+
     /// <summary>
     /// <see langword="true"/> if and only if the attached <see cref="KMBombModule"/> is solved.
     /// </summary>

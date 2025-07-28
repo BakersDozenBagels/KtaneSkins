@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: b7ebafa9f9008c14c8bd06d70eb4a44b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 4
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Natural Mono
+  fontNames:
+  - Natural Mono
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
